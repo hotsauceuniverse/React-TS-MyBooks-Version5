@@ -6,7 +6,7 @@ import DetailContainer from "../containers/DetailContainer";
 export default function Detail() {
   const token = UseToken();
   if (token === null) {
-    return <Redirect to="/sign" />;
+    return <Redirect to="/signin" />;
   }
   return (
     <div>

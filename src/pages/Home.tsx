@@ -6,7 +6,7 @@ import UseToken from "../hooks/UseToken";
 export default function Home() {
   const token = UseToken();
   if (token === null) {
-    return <Redirect to="/sign" />;
+    return <Redirect to="/signin" />;
   }
   return (
     <div>

@@ -11,17 +11,21 @@ export default function AddContainer() {
     (state) => state.books.loading
   );
   const dispatch = useDispatch();
+
   const logout = useCallback(() => {
     dispatch(Startlogout());
   }, [dispatch]);
+
   const back = useCallback(() => {
     dispatch(goBack());
   }, [dispatch]);
+
   const add = useCallback(
     (book: BookReqType) => {
       dispatch(addBook(book));
     },
     [dispatch]
   );
+  
   return <Add logout={logout} loading={loading} back={back} add={add} />;
 }
