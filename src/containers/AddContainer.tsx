@@ -23,9 +23,7 @@ export default function AddContainer() {
   const add = useCallback(
     (book: BookReqType) => {
       dispatch(addBook(book));
-    },
-    [dispatch]
-  );
-  
+    },[dispatch]);
+
   return <Add logout={logout} loading={loading} back={back} add={add} />;
 }

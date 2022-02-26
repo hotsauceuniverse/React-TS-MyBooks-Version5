@@ -13,7 +13,13 @@ const create = () => {
   const Saga = createSagaMiddleware();
   const store = createStore(
     reducer(history),
-    { auth: { token, loading: false, error: null } },
+    { auth: 
+      { 
+        token, 
+        loading: false, 
+        error: null 
+      } 
+    },
     composeWithDevTools(applyMiddleware(Saga, routerMiddleware(history)))
   );
   Saga.run(rootSaga);

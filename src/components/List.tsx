@@ -1,80 +1,67 @@
-import { Link } from "react-router-dom";
-import {
-  BookOutlined,
-  DeleteOutlined,
-  EditOutlined,
-  HomeOutlined,
-} from "@ant-design/icons";
+import { Button, PageHeader, Table } from "antd";
+import { useEffect } from "react";
 import { BookType } from "../types";
-import moment from "moment";
-import { Button, Tooltip } from "antd";
+import Layout from "./Layout";
+import Book from "./Book"
+import styles from "./List.module.css"
 
-interface BookProps extends BookType {
+interface ListProps {
+  books: BookType[] | null;
+  loading: boolean;
+  error: Error | null;
+  getBooks: () => void;
+  logout: () => void;
+  goAdd: () => void;
   deleteBook: (bookId: number) => void;
-  Editclick: (bookId: number) => void;
 }
 
-const List: React.FC<BookProps> = ({
-  bookId,
-  title,
-  author,
-  createdAt,
-  url,
+const List: React.FC<ListProps> = ({
+  books, 
+  loading, 
+  getBooks, 
+  error, 
+  logout,
+  goAdd,
   deleteBook,
-  Editclick,
 }) => {
-  return (
-    <div>
-      <div>
-        <Link to={`/book/${bookId}`}>
-          <BookOutlined />
-          {title}
-        </Link>
-      </div>
-      <div>
-        <Link to={`/book/${bookId}`}>
-          <BookOutlined />
-          {author}
-        </Link>
-      </div>
-      <div>{moment(createdAt).format("MM-DD-YYYY hh:mm a")}</div>
-      <div>
-        <Tooltip title={url}>
-          <a href={url} target="_blank" rel="noreferrer">
-            <Button
-              size="small"
-              type="primary"
-              shape="circle"
-              icon={<HomeOutlined />}
-            />
-          </a>
-        </Tooltip>
-        <Tooltip title="Edit">
-          <Button
-            size="small"
-            shape="circle"
-            onClick={clickEdit}
-            icon={<EditOutlined />}
-          />
-        </Tooltip>
-        <Tooltip title="Delete">
-          <Button
-            size="small"
-            type="primary"
-            shape="circle"
-            danger
-            icon={<DeleteOutlined />}
-            onClick={clickdelete}
-          />
-        </Tooltip>
-      </div>
-    </div>
+  useEffect(() => {
+    // 책을 받아오는 함수
+    getBooks();
+  }, [getBooks])
+
+  useEffect(() => {
+    if(error) {
+      logout();
+    }
+  }, [error, logout])
+
+  return(
+    <Layout>
+      <PageHeader 
+        title={<div>Book List</div>} 
+        extra={[
+          <Button key="2" type="primary" onClick={goAdd} className={styles.button}>Add Book</Button>, 
+          <Button key="1" type="primary" onClick={logout} className={styles.button}>Logout</Button>,
+        ]} 
+      />
+      <Table 
+        dataSource={books || []} 
+        columns={[
+          {
+            title: "Book",
+            dataIndex: "book",
+            key: "book",
+            render: (text, record) => <Book {...record} deleteBook={deleteBook} />,
+          },
+        ]} 
+        loading={books === null || loading}
+        showHeader={false}
+        rowKey="bookId"
+        pagination={false}
+        className={styles.table}
+      />
+    </Layout>
   );
-  function clickdelete() {
-    deleteBook(bookId);
-  }
-  function clickEdit() {
-    Editclick(bookId);
-  }
 };
+
 export default List;

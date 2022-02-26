@@ -1,13 +1,6 @@
 import { push } from "connected-react-router";
 import { Action, createActions, handleActions } from "redux-actions";
-import {
-  all,
-  call,
-  put,
-  select,
-  takeEvery,
-  takeLatest,
-} from "redux-saga/effects";
+import { all, call, put, select, takeEvery, takeLatest } from "redux-saga/effects";
 import history from "../../history";
 import BookService from "../../services/BookService";
 import { BookEditType, BookReqType, BookState, BookType } from "../../types";
@@ -17,6 +10,7 @@ const initialstate: BookState = {
   loading: false,
   error: null,
 };
+
 const prefix = "my-books/books";
 
 export const { pending, success, fail } = createActions(
@@ -25,6 +19,7 @@ export const { pending, success, fail } = createActions(
   "FAIL",
   { prefix }
 );
+
 const reducer = handleActions<BookState, BookType[]>(
   {
     PENDING: (state) => ({ ...state, loading: true, error: null }),
@@ -39,8 +34,7 @@ const reducer = handleActions<BookState, BookType[]>(
       error: action.payload,
     }),
   },
-  initialstate,
-  { prefix }
+  initialstate, { prefix }
 );
 export default reducer;
 
@@ -51,9 +45,7 @@ export const { getBooks, addBook, deleteBook, editClick, editData } =
     "DELETE_BOOK",
     "EDIT_CLICK",
     "EDIT_DATA",
-    {
-      prefix,
-    }
+    { prefix }
   );
 
 function* getBooksSaga() {
@@ -62,10 +54,11 @@ function* getBooksSaga() {
     const token: string = yield select((state) => state.auth.token);
     const books: BookType[] = yield call(BookService.getBooks, token);
     yield put(success(books));
-  } catch (error) {
-    yield put(fail(new Error("UNKNOWN_ERROR")));
+  } catch (error: any) {
+    yield put(fail(new Error(error?.response?.data?.error || "UNKNOWN_ERROR")))
   }
 }
+
 function* addBookSaga(action: Action<BookReqType>) {
   try {
     yield put(pending());
@@ -78,10 +71,11 @@ function* addBookSaga(action: Action<BookReqType>) {
     const books: BookType[] = yield select((state) => state.books.books);
     yield put(success([...books, book]));
     yield put(push("/"));
-  } catch (error) {
-    yield put(fail(new Error("UNKNOWN_ERROR")));
+  } catch (error: any) {
+    yield put(fail(new Error(error?.response?.data?.error || "UNKNOWN_ERROR")))
   }
 }
+
 function* deleteBookSaga(action: Action<number>) {
   try {
     const bookId = action.payload;
@@ -90,32 +84,35 @@ function* deleteBookSaga(action: Action<number>) {
     yield call(BookService.deleteBook, token, bookId);
     const books: BookType[] = yield select((state) => state.books.books);
     yield put(success(books.filter((book) => book.bookId !== bookId)));
-  } catch (error) {
-    yield put(fail(new Error("UNKNOWN")));
+  } catch (error: any) {
+    yield put(fail(new Error(error?.response?.data?.error || "UNKNOWN_ERROR")))
   }
 }
+
 function* Editclick(action: Action<number>) {
   try {
     console.log("edit");
-
     history.push({
       pathname: `/detail${action.payload}`,
-      // state: { bookId: action.payload },
+      // state: { bookId: action.payload },  <- 에러가 생기는 이유는...??
     });
-  } catch (error) {
-    yield put(fail(new Error("UNKNOWN")));
+  } catch (error: any) {
+    yield put(fail(new Error(error?.response?.data?.error || "UNKNOWN_ERROR")))
   }
 }
+
 function* EditDataSaga(action: Action<BookReqType>) {
   try {
     console.log(action.payload);
-  } catch (error) {
-    yield put(fail(new Error("UNKNOWN")));
+  } catch (error: any) {
+    yield put(fail(new Error(error?.response?.data?.error || "UNKNOWN_ERROR")))
   }
 }
+
 export function* rootSaga() {
   yield all([getBooksSaga()]);
 }
+
 export function* booksSaga() {
   yield takeLatest(`${prefix}/GET_BOOKS`, getBooksSaga);
   yield takeEvery(`${prefix}/ADD_BOOK`, addBookSaga);

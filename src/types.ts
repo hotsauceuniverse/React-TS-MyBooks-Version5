@@ -2,6 +2,7 @@ import { RouterState } from "connected-react-router";
 import { AnyAction, Reducer } from "redux";
 
 export type LoginReqType = { email: string; password: string };
+
 export interface RootState {
   auth: AuthState;
   books: BookState;

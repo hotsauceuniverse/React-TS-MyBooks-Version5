@@ -5,8 +5,10 @@ import UseToken from "../hooks/UseToken";
 
 export default function Signin() {
   const token = UseToken();
+  
   if (token !== null) {
     return <Redirect to="/" />;
   }
+  
   return <SigninContainer />;
 }

@@ -8,6 +8,7 @@ export default function Home() {
   if (token === null) {
     return <Redirect to="/signin" />;
   }
+  
   return (
     <div>
       <h1>

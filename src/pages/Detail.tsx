@@ -8,6 +8,7 @@ export default function Detail() {
   if (token === null) {
     return <Redirect to="/signin" />;
   }
+  
   return (
     <div>
       <DetailContainer />

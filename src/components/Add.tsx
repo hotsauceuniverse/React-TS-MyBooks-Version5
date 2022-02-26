@@ -12,11 +12,13 @@ interface AddProps {
   loading: boolean;
   add: (book: BookReqType) => void;
 }
+
 const Add: React.FC<AddProps> = ({ logout, back, loading, add }) => {
   const titleRef = useRef<Input>(null);
   const commentRef = useRef<TextAreaType>(null);
   const authRef = useRef<Input>(null);
   const urlRef = useRef<Input>(null);
+
   return (
     <Layout>
       <PageHeader
@@ -36,28 +38,28 @@ const Add: React.FC<AddProps> = ({ logout, back, loading, add }) => {
       <div>
         <div>
           제목
-          <span></span>
+          <span> *</span>
         </div>
         <div>
           <Input ref={titleRef} placeholder="제목" />
         </div>
         <div>
           코멘트
-          <span></span>
+          <span> *</span>
         </div>
         <div>
           <TextArea ref={commentRef} rows={4} placeholder="코멘트" />
         </div>
         <div>
           저자
-          <span></span>
+          <span> *</span>
         </div>
         <div>
           <Input ref={authRef} placeholder="저자" />
         </div>
         <div>
           URL
-          <span></span>
+          <span> *</span>
         </div>
         <div>
           <Input ref={urlRef} placeholder="URL" />
@@ -70,6 +72,7 @@ const Add: React.FC<AddProps> = ({ logout, back, loading, add }) => {
       </div>
     </Layout>
   );
+  
   function click() {
     const title = titleRef.current!.state.value;
     const comment = commentRef.current!.resizableTextArea.props.value as string;

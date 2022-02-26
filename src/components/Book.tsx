@@ -1,76 +1,47 @@
-import { Button, PageHeader, Table } from "antd";
-import { useEffect } from "react";
+import { Link } from "react-router-dom";
+import {BookOutlined, DeleteOutlined, EditOutlined, HomeOutlined} from '@ant-design/icons'
 import { BookType } from "../types";
-import Layout from "./Layout";
-import List from "./List";
+import moment from "moment"
+import { Button, Tooltip } from "antd";
+import styles from "./Books.module.css"
 
-interface BookProps {
-  books: BookType[] | null;
-  loading: boolean;
-  error: Error | null;
-  getBooks: () => void;
-  logout: () => void;
-  goAdd: () => void;
+interface BookProps extends BookType {
   deleteBook: (bookId: number) => void;
-  Editclick: (bookId: number) => void;
 }
-const Book: React.FC<BookProps> = ({
-  books,
-  loading,
-  getBooks,
-  error,
-  logout,
-  goAdd,
-  deleteBook,
-  Editclick,
-}) => {
-  useEffect(() => {
-    getBooks();
-  }, [getBooks]);
-  useEffect(() => {
-    if (error) {
-      logout();
-    }
-  }, [error, logout]);
 
+const Book: React.FC<BookProps> = ({bookId, title, author, createdAt, url, deleteBook}) => {
   return (
-    <Layout>
-      <div>
-        <PageHeader
-          title={<div>Book</div>}
-          extra={[
-            <Button key="1" onClick={logout}>
-              로그아웃
-            </Button>,
-            <Button key="2" onClick={goAdd}>
-              추가
-            </Button>,
-          ]}
-        />
-        <Table
-          dataSource={books || []}
-          columns={[
-            {
-              title: "Book",
-              dataIndex: "book",
-              key: "book",
-              render: (text, record) => (
-                <List
-                  Editclick={Editclick}
-                  deleteBook={deleteBook}
-                  {...record}
-                />
-              ),
-            },
-          ]}
-          loading={books === null || loading}
-          showHeader={false}
-          rowKey="bookId"
-          pagination={false}
-        />
+    <div className={styles.book}>
+      <div className={styles.title}>
+        <Link to={`/book/${bookId}`} className={styles.link_detail_title}>
+          <BookOutlined /> {title}
+        </Link>
       </div>
-    </Layout>
+      <div className={styles.author}>
+        <Link to={`/book/${bookId}`} className={styles.link_detail_author}>
+          {author}
+        </Link>
+      </div>
+      <div className={styles.created}>{moment(createdAt).format('MM-DD-YYYY hh:mm a')}</div>
+      <div className={styles.tooltips}>
+        <Tooltip title={url}>
+          <a href={url} rel="noreferrer" target="_blank" className={styles.link_url}>
+            <Button size="small" type="primary" shape="circle" icon={<HomeOutlined />} className={styles.button_url} /> 
+          </a>
+        </Tooltip>
+        <Tooltip title="Edit">
+          <Button size="small" shape="circle" icon={<EditOutlined />} className={styles.button_edit} /> 
+        </Tooltip>
+        <Tooltip title="Delete">
+          <Button size="small" type="primary" shape="circle" danger icon={<DeleteOutlined />} className={styles.button_delete} onClick={clickDelete} /> 
+        </Tooltip>
+      </div>
+    </div>
   );
-};
+
+  function clickDelete() {
+    deleteBook(bookId);
+  }
+}
 
 export default Book;

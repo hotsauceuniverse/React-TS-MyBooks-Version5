@@ -13,6 +13,7 @@ interface AddProps {
   loading: boolean;
   Edit: (book: BookReqType) => void;
 }
+
 const Detail: React.FC<AddProps> = ({ logout, back, loading, Edit }) => {
   const titleRef = useRef<Input>(null);
   const commentRef = useRef<TextAreaType>(null);
@@ -41,28 +42,28 @@ const Detail: React.FC<AddProps> = ({ logout, back, loading, Edit }) => {
       <div>
         <div>
           제목
-          <span></span>
+          <span> *</span>
         </div>
         <div>
           <Input ref={titleRef} placeholder="제목" />
         </div>
         <div>
           코멘트
-          <span></span>
+          <span> *</span>
         </div>
         <div>
           <TextArea ref={commentRef} rows={4} placeholder="코멘트" />
         </div>
         <div>
           저자
-          <span></span>
+          <span> *</span>
         </div>
         <div>
           <Input ref={authRef} placeholder="저자" />
         </div>
         <div>
           URL
-          <span></span>
+          <span>*</span>
         </div>
         <div>
           <Input ref={urlRef} placeholder="URL" />
@@ -75,6 +76,7 @@ const Detail: React.FC<AddProps> = ({ logout, back, loading, Edit }) => {
       </div>
     </Layout>
   );
+  
   function click() {
     const title = titleRef.current!.state.value;
     const comment = commentRef.current!.resizableTextArea.props.value as string;

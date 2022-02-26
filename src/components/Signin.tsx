@@ -10,7 +10,6 @@ interface SigninProps {
   login: (reqData: LoginReqType) => void;
 }
 
-
 const Signin: React.FC<SigninProps> = ({login}) => {
 const emailRef = useRef<Input>(null);
 const passwordRef = useRef<Input>(null);
