@@ -20,29 +20,27 @@ export const { pending, success, fail } = createActions(
   { prefix }
 );
 
-const reducer = handleActions<AuthState, string>(
-  {
-    PENDING: (state) => ({ 
-      ...state, 
-      loading: true, 
-      error: null 
-    }),
-    SUCCESS: (state, action) => ({
-      token: action.payload,
-      loading: false,
-      error: null,
-    }),
-    FAIL: (state, action: any) => ({
-      token: action.payload,
-      loading: false,
-      error: action.payload,
-    }),
-  },
-  initialstate, { prefix }
-);
+const reducer = handleActions<AuthState, string>({
+  PENDING: (state) => ({
+    ...state,
+    loading: true,
+    error: null,
+  }),
+  SUCCESS: (state, action) => ({
+    token: action.payload,
+    loading: false,
+    error: null,
+  }),
+  FAIL: (state, action: any) => ({
+    ...state,
+    loading: false,
+    error: action.payload,
+  }),
+}, initialstate, {prefix});
 
 export default reducer;
 
+// saga
 export const { login, logout } = createActions("LOGIN", "LOGOUT", { prefix });
 function* loginSaga(action: Action<LoginReqType>) {
   try {

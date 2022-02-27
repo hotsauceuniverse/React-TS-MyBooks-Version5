@@ -3,7 +3,7 @@ import { useDispatch } from "react-redux";
 import Signin from "../components/Signin";
 import { login as loginSaga } from "../redux/modules/auth";
 
-export default function SignContainer() {
+export default function SigninContainer() {
   const dispatch = useDispatch();
   const login = useCallback(
     (reqdata) => {
