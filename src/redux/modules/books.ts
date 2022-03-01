@@ -22,7 +22,11 @@ export const { pending, success, fail } = createActions(
 
 const reducer = handleActions<BookState, BookType[]>(
   {
-    PENDING: (state) => ({ ...state, loading: true, error: null }),
+    PENDING: (state) => ({ 
+      ...state, 
+      loading: true,
+      error: null
+    }),
     SUCCESS: (state, action) => ({
       books: action.payload,
       loading: false,

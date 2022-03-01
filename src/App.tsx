@@ -8,7 +8,8 @@ import Home from './pages/Home';
 import NotFound from './pages/NotFound';
 import Signin from './pages/Signin';
 import Error from './pages/Error';
-import { ConnectedRouter } from "connected-react-router";
+// import { ConnectedRouter } from "connected-react-router";
+import { ConnectedRouter } from 'connected-react-router/immutable';
 import history from "./history";
 
 function App() {

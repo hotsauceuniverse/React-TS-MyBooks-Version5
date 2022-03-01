@@ -9,7 +9,7 @@ import { push } from "connected-react-router";
 export default function ListContainer() {
   const books = useSelector<RootState, BookType[] | null>(
     (state) => state.books.books
-  )
+  );
 
   const loading = useSelector<RootState, boolean>(
     (state) => state.books.loading
@@ -27,15 +27,15 @@ export default function ListContainer() {
 
   const logout = useCallback(() => {
     dispatch(logoutSagaStart())
-  },[dispatch]);
+  }, [dispatch]);
 
   const goAdd = useCallback(() => {
     dispatch(push('/add'))
-  },[dispatch])
+  }, [dispatch])
 
   const deleteBook = useCallback((bookId: number) => {
     dispatch(deleteBookSagaStart(bookId))
-  },[dispatch])
+  }, [dispatch])
 
   return (
     <List 

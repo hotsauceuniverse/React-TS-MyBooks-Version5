@@ -1,3 +1,5 @@
+// 여러 리듀서모듈을 관리
+
 import { connectRouter } from "connected-react-router";
 import { combineReducers } from "redux";
 import auth from "./auth";

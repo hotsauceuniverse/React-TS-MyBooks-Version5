@@ -44,6 +44,7 @@ const List: React.FC<ListProps> = ({
           <Button key="1" type="primary" onClick={logout} className={styles.button}>Logout</Button>,
         ]} 
       />
+      <img src="bg_list.png" alt="Main" className={styles.main_img} />
       <Table 
         dataSource={books || []} 
         columns={[

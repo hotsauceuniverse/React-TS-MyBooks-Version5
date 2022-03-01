@@ -1,93 +1,101 @@
-import { ForkOutlined } from "@ant-design/icons";
-import { Button, Input, message, PageHeader } from "antd";
-import TextArea from "antd/lib/input/TextArea";
-import TextAreaType from "rc-textarea";
-import { useRef } from "react";
-import { useLocation } from "react-router-dom";
-import { BookReqType } from "../types";
-import Layout from "./Layout";
+import { FormOutlined } from "@ant-design/icons"
+import { Button, Input, PageHeader, message as messageDialog } from "antd"
+import TextArea from "antd/lib/input/TextArea"
+import Layout from "./Layout"
+import styles from "./Add.module.css"
+import { useRef } from "react"
+import TextAreaType from  "rc-textarea"
+import { BookReqType } from "../types"
 
 interface AddProps {
-  logout: () => void;
-  back: () => void;
   loading: boolean;
-  Edit: (book: BookReqType) => void;
+  back: () => void;
+  logout: () => void;
+  add: (book: BookReqType) => void;
 }
 
-const Detail: React.FC<AddProps> = ({ logout, back, loading, Edit }) => {
+const Detail: React.FC<AddProps> = ({loading, back, logout, add}) => {
   const titleRef = useRef<Input>(null);
-  const commentRef = useRef<TextAreaType>(null);
-  const authRef = useRef<Input>(null);
+  const messageRef = useRef<TextAreaType>(null);
+  const authorRef = useRef<Input>(null);
   const urlRef = useRef<Input>(null);
-  const location = useLocation<any>();
-  const bookId = location.state.bookId;
-  console.log(bookId);
-
+  
   return (
     <Layout>
-      <PageHeader
-        onBack={back}
+      <PageHeader 
+        onBack={back} 
         title={
           <div>
-            <ForkOutlined />책 추가
+            <FormOutlined /> Add Book
           </div>
-        }
-        subTitle="책을 추가해주세요"
+        } 
+        subTitle="Add Your Book"
         extra={[
-          <Button key={1} type="primary" onClick={logout}>
-            로그아웃
-          </Button>,
+          <Button key="1" type="primary" onClick={logout} className={styles.button_logout}>
+            Logout
+          </Button>
         ]}
       />
-      <div>
-        <div>
-          제목
-          <span> *</span>
+      {/* 해당 이미지 부분 margin left / right 20% 추가 - Details.module.css 파일 생성 */}
+      <img src="bg_list.png" alt="Main" /> 
+      <div className={styles.add}>
+        <div className={styles.input_title}>
+          Title
+          <span className={styles.required}> *</span>
+        </div>
+        <div className={styles.input_area}>
+          <Input placeholder="Title" className={styles.input} ref={titleRef} />
+        </div>
+        <div className={styles.input_comment}>
+          Comment
+          <span className={styles.required}> *</span>
+        </div>
+        <div className={styles.input_area}>
+          <TextArea rows={4} placeholder="Comment" className={styles.input} ref={messageRef} />
+        </div>
+        <div className={styles.input_author}>
+          Author
+          <span className={styles.required}> *</span>
         </div>
         <div>
-          <Input ref={titleRef} placeholder="제목" />
+          <Input placeholder="Author" className={styles.input} ref={authorRef} />
         </div>
-        <div>
-          코멘트
-          <span> *</span>
-        </div>
-        <div>
-          <TextArea ref={commentRef} rows={4} placeholder="코멘트" />
-        </div>
-        <div>
-          저자
-          <span> *</span>
-        </div>
-        <div>
-          <Input ref={authRef} placeholder="저자" />
-        </div>
-        <div>
+        <div className={styles.input_url}>
           URL
-          <span>*</span>
+          <span className={styles.required}> *</span>
         </div>
-        <div>
-          <Input ref={urlRef} placeholder="URL" />
+        <div className={styles.input_area}>
+          <Input placeholder="URL" className={styles.input} ref={urlRef} />
         </div>
-        <div>
-          <Button size="large" loading={loading} onClick={click}>
-            수정
-          </Button>
+        <div className={styles.button_area}>
+          <Button size="large" loading={loading} onClick={click} className={styles.button}>Add</Button>
         </div>
       </div>
-    </Layout>
+    </Layout> 
   );
-  
+
   function click() {
     const title = titleRef.current!.state.value;
-    const comment = commentRef.current!.resizableTextArea.props.value as string;
-    const auth = authRef.current!.state.value;
+    const message = messageRef.current!.resizableTextArea.props.value as string;
+    const author = authorRef.current!.state.value;
     const url = urlRef.current!.state.value;
 
-    if (title == null && comment === "" && url == null && auth == null) {
-      message.error("한개라도 채워주세요");
-      return;
+    if(
+      title === undefined || 
+      message === undefined || 
+      author === undefined || 
+      url === undefined
+      ) {
+        messageDialog.error("Please fill out all inputs")
+        return;
     }
-    Edit({ title, comment, auth, url });
+    
+    add({
+      title,
+      message,
+      author,
+      url,
+    });
   }
 };
 

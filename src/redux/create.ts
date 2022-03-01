@@ -1,3 +1,5 @@
+// store를 만드는 역할
+
 import {createStore, applyMiddleware} from "redux"
 import {composeWithDevTools} from "redux-devtools-extension"
 import reducer from "./modules/reducer";
